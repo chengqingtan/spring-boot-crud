@@ -13,12 +13,6 @@ drop table if exists tb_pet;
 drop table if exists tb_user;
 
 
-# create table tb_admin(
-#      username    varchar(10) primary key,
-#      password    varchar(10) not null
-# );
-
-
 create table tb_user
 (
     username    varchar(10) primary key,

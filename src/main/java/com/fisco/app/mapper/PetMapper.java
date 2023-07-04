@@ -3,6 +3,7 @@ package com.fisco.app.mapper;
 
 import com.fisco.app.entity.Pet;
 import org.apache.ibatis.annotations.*;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

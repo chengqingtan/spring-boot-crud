@@ -82,7 +82,7 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>3.0.2</version>
+            <version>2.2.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.fisco-bcos/web3sdk -->
         <dependency>

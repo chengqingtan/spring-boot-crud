@@ -13,6 +13,11 @@ public class UserController {
     @Autowired
     private UserClient userClient;
 
+    @PostMapping("test_post")
+    public ResponseData test_post() {
+        return ResponseData.success("success");
+    }
+
     @PostMapping("/user_login")
     public ResponseData user_login(@RequestBody String username, @RequestBody String password) {
         //调用UserClient内的函数
