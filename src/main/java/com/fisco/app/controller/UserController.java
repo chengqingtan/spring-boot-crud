@@ -63,7 +63,7 @@ public class UserController {
      * @return 如果有这个用户返回 ResponseData.success(“success") , 否则返回 ResponseData.error("can't find this user!")
      */
     @PostMapping("/add_balance")
-    public ResponseData add_balance(@RequestBody String username, @RequestBody double amount) {
+    public ResponseData add_balance(@RequestBody String username, @RequestBody int amount) {
         //调用UserClient内的函数
         boolean whether_add_success = userClient.add_balance(username, amount);
         if(whether_add_success)

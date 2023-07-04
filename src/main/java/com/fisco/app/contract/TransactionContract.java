@@ -14,20 +14,16 @@ public class TransactionContract extends Contract {
         super(contractBinary, contractAddress, client, credential);
     }
 
-//    private Integer transaction_id;
-//    private Integer pet_id;
-//    private String purchase_username;
-//    private String sell_username;
-//    private String transaction_date;
 
     /**
      * 存储一次交易记录，除了以下参数还要生成一个独一无二的 transaction_id 存储起来
      * @param pet_id 交易的宠物
      * @param purchase_username 购买用户名
-     * @param sell_username 出售宠物的用户名
+     * @param owner 出售宠物的用户名
      * @param transaction_date 交易日期
+     * @param price 交易价格
      */
-    public void record_transaction(int pet_id, String purchase_username, String sell_username, String transaction_date) {
+    public void record_transaction(int pet_id, String purchase_username, String owner, String transaction_date, int price) {
         //需要完成
 
     }

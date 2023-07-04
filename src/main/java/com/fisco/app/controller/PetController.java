@@ -17,11 +17,10 @@ public class PetController {
     private PetClient petClient;
 
     @PostMapping("/add_pet")
-    public ResponseData add_pet(@RequestBody String pet_name, @RequestBody String sell_username,
+    public ResponseData add_pet(@RequestBody String pet_name, @RequestBody String owner,
                                 @RequestBody String picture_path, @RequestBody String description,
-                                @RequestBody double price, @RequestBody String pet_class,
-                                @RequestBody boolean has_sold_out) {
-        petClient.add_pet(pet_name, sell_username, picture_path, description, price, pet_class, has_sold_out);
+                                @RequestBody int price, @RequestBody String pet_class) {
+        petClient.add_pet(pet_name, owner, picture_path, description, price, pet_class);
         return ResponseData.success("success");
     }
 
@@ -41,12 +40,12 @@ public class PetController {
 
     /**
      * 根据用户名查找这个用户售卖的所有宠物
-     * @param username 指定的用户名
+     * @param owner 指定的宠物所有者的用户名
      * @return 返回值里包含一个宠物列表(宠物列表可能为空)
      */
-    @PostMapping("/query_pets_by_username")
-    public ResponseData query_pets_by_username(@RequestBody String username) {
-        List<Pet> pets = petClient.query_pets_by_username(username);
+    @PostMapping("/query_pets_by_owner")
+    public ResponseData query_pets_by_owner(@RequestBody String owner) {
+        List<Pet> pets = petClient.query_pets_by_owner(owner);
         return ResponseData.success(pets);
     }
 

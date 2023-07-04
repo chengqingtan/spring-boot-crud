@@ -8,10 +8,10 @@ import lombok.Data;
 public class Pet {
     private Integer pet_id;
     private String pet_name;
-    private String sell_username;
+    private String owner;
     private String picture_path;
     private String description;
-    private double price;
+    private Integer price;
     private String pet_class;
-    private boolean has_sold_out;
+    private Boolean has_sold_out;
 }

@@ -16,9 +16,9 @@ public class TransactionClient extends CommonClient implements ApplicationRunner
 
     public static final Logger logger = LoggerFactory.getLogger(TransactionClient.class.getName());
 
-    public void record_transaction(int pet_id, String purchase_username, String sell_username, String transaction_date) {
+    public void record_transaction(int pet_id, String purchase_username, String sell_username, String transaction_date, int price) {
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
-        transactionContract.record_transaction(pet_id, purchase_username, sell_username, transaction_date);
+        transactionContract.record_transaction(pet_id, purchase_username, sell_username, transaction_date, price);
         logger.info("调用TransactionClient的record_transaction方法");
         logger.info("结果：{}", "void");
     }

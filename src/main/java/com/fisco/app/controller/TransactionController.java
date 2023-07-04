@@ -33,13 +33,13 @@ public class TransactionController {
     public ResponseData purchase_pet(@RequestBody String username, @RequestBody int pet_id) {
         //根据pet_id找到宠物的售卖人和宠物的价格
         Pet pet = petClient.query_pet_by_id(pet_id);
-        String sellUsername = pet.getSell_username();
-        double price = pet.getPrice();
+        String owner = pet.getOwner();
+        int price = pet.getPrice();
         //进行转账操作
-        if (userClient.transfer(username, sellUsername, price)) {
+        if (userClient.transfer(username, owner, price)) {
             //转账成功后记录交易
             String transaction_date = LocalDate.now().toString();
-            transactionClient.record_transaction(pet_id, username, sellUsername, transaction_date);
+            transactionClient.record_transaction(pet_id, username, owner, transaction_date, price);
             //并将宠物状态设为已卖出
             petClient.set_pet_has_sold_out(pet_id);
             return ResponseData.success("success");

@@ -3,6 +3,7 @@ package com.fisco.app.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,4 +15,5 @@ public class Transaction {
     private String purchase_username;
     private String sell_username;
     private String transaction_date;
+    private Integer price;
 }
