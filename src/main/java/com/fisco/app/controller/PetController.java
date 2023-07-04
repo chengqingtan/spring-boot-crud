@@ -6,6 +6,7 @@ import com.fisco.app.entity.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public class PetController {
     private PetClient petClient;
 
     @PostMapping("/add_pet")
-    public ResponseData add_pet(@RequestBody String pet_name, @RequestBody String owner,
-                                @RequestBody String picture_path, @RequestBody String description,
-                                @RequestBody int price, @RequestBody String pet_class) {
+    public ResponseData add_pet(@RequestParam("pet_name") String pet_name, @RequestParam("owner") String owner,
+                                @RequestParam("picture_path") String picture_path, @RequestParam("description") String description,
+                                @RequestParam("price") int price, @RequestParam("pet_class") String pet_class) {
         petClient.add_pet(pet_name, owner, picture_path, description, price, pet_class);
         return ResponseData.success("success");
     }
@@ -30,7 +31,7 @@ public class PetController {
      * @return 返回值ResponseData.data里包含找到的宠物，如果没有则返回ResponseData.error("can't find this pet!")
      */
     @PostMapping("/query_pet_by_id")
-    public ResponseData query_pet_by_id(@RequestBody int pet_id) {
+    public ResponseData query_pet_by_id(@RequestParam("pet_id") int pet_id) {
         Pet pet = petClient.query_pet_by_id(pet_id);
         if(pet == null)
             return ResponseData.error("can't find this pet!");
@@ -44,7 +45,7 @@ public class PetController {
      * @return 返回值里包含一个宠物列表(宠物列表可能为空)
      */
     @PostMapping("/query_pets_by_owner")
-    public ResponseData query_pets_by_owner(@RequestBody String owner) {
+    public ResponseData query_pets_by_owner(@RequestParam("owner") String owner) {
         List<Pet> pets = petClient.query_pets_by_owner(owner);
         return ResponseData.success(pets);
     }

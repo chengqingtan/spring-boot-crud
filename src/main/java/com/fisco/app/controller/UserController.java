@@ -5,6 +5,7 @@ import com.fisco.app.entity.ResponseData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -19,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping("/user_login")
-    public ResponseData user_login(@RequestBody String username, @RequestBody String password) {
+    public ResponseData user_login(@RequestParam("username") String username, @RequestParam("password") String password) {
         //调用UserClient内的函数
         if(userClient.user_login(username, password))
             return ResponseData.success("success");
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping("/admin_login")
-    public ResponseData admin_login(@RequestBody String username, @RequestBody String password) {
+    public ResponseData admin_login(@RequestParam("username") String username, @RequestParam("password") String password) {
         //调用UserClient内的函数
         if(userClient.admin_login(username, password))
             return ResponseData.success("success");
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseData register(@RequestBody String username, @RequestBody String password) {
+    public ResponseData register(@RequestParam("username") String username, @RequestParam("password") String password) {
         //调用UserClient内的函数
         if(userClient.register(username, password))
             return ResponseData.success("success");
@@ -46,14 +47,15 @@ public class UserController {
     }
 
     /**
-     * 查询指定用户的余额，balance为double类型
+     * 查询指定用户的余额
      * @param username 要查询用户的用户名
      * @return 如果有这个用户返回 ResponseData.success(balance) , 否则返回 ResponseData.error("can't find this user!")
      */
     @PostMapping("/query_balance")
-    public ResponseData query_balance(@RequestBody String username) {
+    public ResponseData query_balance(@RequestParam("username") String username) {
         //调用UserClient内的函数
-        double balance = userClient.query_balance(username);
+
+        int balance = userClient.query_balance(username);
         if(balance>=0)
             return ResponseData.success(balance);
         else
@@ -68,7 +70,7 @@ public class UserController {
      * @return 如果有这个用户返回 ResponseData.success(“success") , 否则返回 ResponseData.error("can't find this user!")
      */
     @PostMapping("/add_balance")
-    public ResponseData add_balance(@RequestBody String username, @RequestBody int amount) {
+    public ResponseData add_balance(@RequestParam("username") String username, @RequestParam("amount") int amount) {
         //调用UserClient内的函数
         boolean whether_add_success = userClient.add_balance(username, amount);
         if(whether_add_success)

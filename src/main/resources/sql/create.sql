@@ -17,8 +17,8 @@ create table tb_user
 (
     username    varchar(10) primary key,
     password    varchar(10) not null,
-    private_key varchar(50),
-    public_key  varchar(50),
+    private_key text,
+    public_key  text,
     address     varchar(50)
 );
 

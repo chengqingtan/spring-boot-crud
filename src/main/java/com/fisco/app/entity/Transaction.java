@@ -9,7 +9,7 @@ import lombok.Data;
 public class Transaction {
     private Integer pet_id;
     private String purchase_username;
-    private String sell_username;
+    private String owner;
     private String transaction_date;
     private Integer price;
 }

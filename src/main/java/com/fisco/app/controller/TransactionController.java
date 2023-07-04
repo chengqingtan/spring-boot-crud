@@ -5,12 +5,17 @@ import com.fisco.app.client.TransactionClient;
 import com.fisco.app.client.UserClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
+import com.fisco.app.entity.Transaction;
+import com.fisco.app.mapper.PetMapper;
+import com.fisco.app.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 public class TransactionController {
@@ -27,12 +32,17 @@ public class TransactionController {
      * 进行一次购买宠物交易
      * @param username 购买者的用户名
      * @param pet_id 购买的宠物pet_id
-     * @return 交易成功返回 ResponseData.success("success") ; 交易失败返回 ResponseData.error("failure")
+     * @return 交易成功返回 ResponseData.success("success") ; 交易失败返回 ResponseData.error("failure"); 宠物不存在返回 ResponseData.error("宠物不存在");
      */
     @PostMapping("/purchase_pet")
-    public ResponseData purchase_pet(@RequestBody String username, @RequestBody int pet_id) {
+    public ResponseData purchase_pet(@RequestParam("username") String username, @RequestParam("pet_id") int pet_id) {
         //根据pet_id找到宠物的售卖人和宠物的价格
         Pet pet = petClient.query_pet_by_id(pet_id);
+        //检查pet_id是否存在这个宠物
+        if(pet == null){
+            //宠物不存在，交易失败
+            return ResponseData.error("宠物不存在");
+        }
         String owner = pet.getOwner();
         int price = pet.getPrice();
         //进行转账操作
@@ -46,6 +56,29 @@ public class TransactionController {
         }
         else
             return ResponseData.error("failure");
+    }
+
+
+    /**
+     * 查询所有的交易
+     * @return ResponseData.data 里包含一个交易列表，列表可能为空列表
+     */
+    @PostMapping("/query_all_transactions")
+    public ResponseData query_all_transactions() {
+        //根据pet_id找到宠物的售卖人和宠物的价格
+        List<Transaction> transactionList = transactionClient.query_all_transactions();
+        return ResponseData.success(transactionList);
+    }
+
+    /**
+     * 通过交易id查询交易记录
+     * @param transaction_id 交易记录
+     * @return ResponseData.data 里包含一个交易记录
+     */
+    @PostMapping("/query_transaction_by_id")
+    public ResponseData query_transaction_by_id(@RequestParam("transaction_id") int transaction_id) {
+        Transaction transaction = transactionClient.query_transaction_by_id(transaction_id);
+        return ResponseData.success(transaction);
     }
     
     

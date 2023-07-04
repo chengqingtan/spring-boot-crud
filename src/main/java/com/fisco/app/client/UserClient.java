@@ -10,10 +10,12 @@ public interface UserClient {
 
     public boolean register(String username, String password);
 
-    public double query_balance(String address);
+    public int query_balance(String address);
 
     public boolean add_balance(String address, int amount);
 
     public boolean transfer(String from, String to, int amount);
+
+    String query_address_by_username(String username);
 
 }

@@ -1,12 +1,9 @@
 package com.fisco.app.client;
 
 import com.fisco.app.entity.Pet;
-
 import java.util.List;
 
 public interface PetClient {
-
-
 
     public void add_pet(String pet_name, String owner, String picture_path,
                        String description, int price, String pet_class);

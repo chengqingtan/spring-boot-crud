@@ -1,5 +1,6 @@
-package com.fisco.app.client;
+package com.fisco.app.client.impl;
 
+import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.mapper.PetMapper;
 import org.springframework.beans.factory.annotation.Autowired;
