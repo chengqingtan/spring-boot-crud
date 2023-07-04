@@ -11,3 +11,10 @@ spring:
 mybatis:
   mapper-locations: classpath:com/fisco/app/mapper/*.xml
   type-aliases-package: com.fisco.app.entity
+
+logging:
+  file:
+    name: log/log.log
+  level:
+    root: info
+    com: debug

@@ -4,5 +4,19 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fisco.app.mapper.PetMapper">
 
+    <!--  查询方法  -->
+
+    <select id="selectAll" resultType="com.fisco.app.entity.Pet">
+        select * from tb_pet;
+    </select>
+
+    <select id="selectById" resultType="com.fisco.app.entity.Pet">
+        select * from tb_pet where pet_id=#{pet_id};
+    </select>
+
+    <select id="selectByOwner" resultType="com.fisco.app.entity.Pet">
+        select * from tb_pet where owner=#{owner};
+    </select>
+
 
 </mapper>
