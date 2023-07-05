@@ -24,8 +24,6 @@ import java.math.BigInteger;
 @Service
 public class UserClientImpl extends CommonClient implements ApplicationRunner, UserClient {
 
-    public static final Logger logger = LoggerFactory.getLogger(UserClient.class.getName());
-
     @Autowired
     private UserMapper userMapper;
 
@@ -78,20 +76,19 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
         } catch (ContractException e) {
             throw new RuntimeException(e);
         }
-        logger.info("调用UserClient的query_balance方法");
-        logger.info("结果：{}", balance);
         return balance;
     }
 
     public boolean add_balance(String username, int amount) {
         UserContract userContract = (UserContract) getContractMap().get("UserContract");
-        String address = userMapper.selectByUsername(username).getAddress();
-        userContract.add_balance(address, BigInteger.valueOf(amount));
-        //无法接受返回值，返回True
-        boolean whether_add_success = true;
-        logger.info("调用UserClient的add_balance方法");
-        logger.info("结果：{}", whether_add_success);
-        return whether_add_success;
+        User user = userMapper.selectByUsername(username);
+        if(user == null)
+            return false;
+        else {
+            String address = user.getAddress();
+            userContract.add_balance(address, BigInteger.valueOf(amount));
+            return true;
+        }
     }
 
     public boolean transfer(String from, String to, int amount) {
@@ -99,12 +96,11 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
         String from_address = userMapper.selectByUsername(from).getAddress();
         String to_address = userMapper.selectByUsername(to).getAddress();
 
-        userContract.transfer(from_address, to_address, BigInteger.valueOf(amount));
-        //无法接受boolean类型返回值，直接返回true.
-        boolean whether_transfer_success = true;
-        logger.info("调用UserClient的transfer方法");
-        logger.info("结果：{}", whether_transfer_success);
-        return whether_transfer_success;
+        TransactionReceipt receipt = userContract.transfer(from_address, to_address, BigInteger.valueOf(amount));
+        if (receipt.isStatusOK())
+            return true;
+        else
+            return false;
     }
 
     public String query_address_by_username(String username) {

@@ -13,10 +13,9 @@
     constructor(){
     }
      /// @dev 记录交易
-     function record_transaction(uint256 pid, string memory purchase_username, string memory owner, string memory transaction_date, uint256 price) external returns (bool){
+     function record_transaction(uint256 pid, string memory purchase_username, string memory owner, string memory transaction_date, uint256 price) external{
         Transaction memory newTransaction = Transaction(pid, purchase_username, owner, transaction_date, price);
         _transactions.push(newTransaction);
-        return true;
      }
      /// @dev 查询所有交易
      function query_all_transaction()external view returns(Transaction[] memory){
@@ -35,12 +34,12 @@
      }
 
      /// @dev 根据owner查询交易
-     function query_owner_transaction(string memory owner)external returns(Transaction[] memory){
+     function query_owner_transaction(string memory owner)external view returns(Transaction[] memory){
          uint n = _transactions.length;
          uint count = 0;
          for(uint i = 0; i < n; i++){
              string memory temp = _transactions[i].owner;
-             if(stringCompare(owner, temp)){
+             if(stringCompare(owner, temp) == 1){
                  count += 1;
              }
          }
@@ -48,7 +47,7 @@
         uint count2 = 0;
         for(uint i = 0; i < n; i++){
              string memory temp = _transactions[i].owner;
-             if(stringCompare(owner, temp)){
+             if(stringCompare(owner, temp) == 1){
                  transaction[count2] = _transactions[i];
                  count2 += 1;
              }
@@ -56,16 +55,16 @@
          return transaction;
      }
      
-     function stringCompare(string memory a, string memory b)internal returns(bool){
+     function stringCompare(string memory a, string memory b)internal view returns(uint256){
          if(bytes(a).length != bytes(b).length){
-             return false;
+             return 0;
          }else{
             for(uint i = 0; i < bytes(a).length; i ++) {
             if(bytes(a)[i] != bytes(b)[i]) {
-                return false;
+                return 0;
             }
         }
-        return true;
+        return 1;
         }
      }
     

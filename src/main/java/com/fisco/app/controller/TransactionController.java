@@ -42,6 +42,9 @@ public class TransactionController {
         if(pet == null){
             //宠物不存在，交易失败
             return ResponseData.error("宠物不存在");
+        } else if (!pet.getHas_sold_out()) {
+            //宠物已经卖出
+            return ResponseData.error("宠物已售出");
         }
         String owner = pet.getOwner();
         int price = pet.getPrice();
@@ -55,7 +58,7 @@ public class TransactionController {
             return ResponseData.success("success");
         }
         else
-            return ResponseData.error("failure");
+            return ResponseData.error("余额不足，转账失败");
     }
 
 

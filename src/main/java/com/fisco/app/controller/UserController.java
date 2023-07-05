@@ -43,7 +43,7 @@ public class UserController {
         if(userClient.register(username, password))
             return ResponseData.success("success");
         else
-            return ResponseData.error("failure");
+            return ResponseData.error("用户名已存在");
     }
 
     /**
