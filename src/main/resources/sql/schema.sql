@@ -28,7 +28,7 @@ create table if not exists tb_pet
     pet_id       int primary key auto_increment,
     pet_name     varchar(10),
     owner        varchar(10),
-    picture_path varchar(50),
+    image_url varchar(50),
     description  varchar(20),
     price        int,
     pet_class    varchar(10),

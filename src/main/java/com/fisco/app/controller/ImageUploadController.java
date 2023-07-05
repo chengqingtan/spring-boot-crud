@@ -25,10 +25,9 @@ public class ImageUploadController {
     @Value("${image-save-path}")
     private String imageSavePath;
 
-    @PostMapping("/upload_picture")
+    @PostMapping("/upload_image")
     public ResponseData fileupload(MultipartFile file, HttpServletRequest req){
 
-        Map<String,Object> result = new HashMap<>();
         //获取文件的名字
         String originName = file.getOriginalFilename();
         System.out.println("originName:"+originName);

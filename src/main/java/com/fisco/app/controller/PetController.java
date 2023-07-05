@@ -18,9 +18,9 @@ public class PetController {
 
     @PostMapping("/add_pet")
     public ResponseData add_pet(@RequestParam("pet_name") String pet_name, @RequestParam("owner") String owner,
-                                @RequestParam("picture_url") String picture_url, @RequestParam("description") String description,
+                                @RequestParam("image_url") String image_url, @RequestParam("description") String description,
                                 @RequestParam("price") int price, @RequestParam("pet_class") String pet_class) {
-        petClient.add_pet(pet_name, owner, picture_url, description, price, pet_class);
+        petClient.add_pet(pet_name, owner, image_url, description, price, pet_class);
         return ResponseData.success("success");
     }
 

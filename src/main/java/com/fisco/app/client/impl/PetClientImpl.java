@@ -14,9 +14,9 @@ public class PetClientImpl implements PetClient {
     @Autowired
     private PetMapper petMapper;
 
-    public void add_pet(String pet_name, String owner, String picture_path,
+    public void add_pet(String pet_name, String owner, String image_url,
                         String description, int price, String pet_class) {
-        petMapper.addPet(pet_name, owner, picture_path, description, price, pet_class);
+        petMapper.addPet(pet_name, owner, image_url, description, price, pet_class);
     }
 
     public Pet query_pet_by_id(int pet_id) {

@@ -9,7 +9,7 @@ public class Pet {
     private Integer pet_id;
     private String pet_name;
     private String owner;
-    private String picture_path;
+    private String image_url;
     private String description;
     private Integer price;
     private String pet_class;
