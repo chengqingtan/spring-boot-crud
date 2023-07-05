@@ -9,7 +9,8 @@ create table if not exists tb_user
     password    varchar(10) not null,
     private_key text,
     public_key  text,
-    address     varchar(50)
+    address     varchar(50),
+    role        varchar(15) default 'ROLE_USER' CHECK ( ROLE IN ('ROLE_USER', 'ROLE_ADMIN') )
 );
 
 create table if not exists tb_user_profile

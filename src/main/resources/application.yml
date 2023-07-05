@@ -10,6 +10,7 @@ spring:
     initialization-mode: always
     continue-on-error: false
     schema: classpath:sql/schema.sql
+    data: classpath:sql/data.sql
 
 mybatis:
   mapper-locations: classpath:mybatis/*.xml
@@ -24,3 +25,8 @@ logging:
     com: debug
 
 image-save-path: D:\fisco\images\
+
+token:
+  secretKey: X17iR94PzGpm96m9lo4tWPte/Dsfi4BI
+  refreshTime: 86400000
+  expiresTime: 43200000

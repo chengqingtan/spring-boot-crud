@@ -3,25 +3,42 @@ package com.fisco.app.controller;
 import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
+import com.fisco.app.entity.User;
+import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PetController {
 
     @Autowired
     private PetClient petClient;
+    @Autowired
+    private TokenUtil tokenUtil;
 
     @PostMapping("/add_pet")
-    public ResponseData add_pet(@RequestParam("pet_name") String pet_name, @RequestParam("owner") String owner,
+    public ResponseData add_pet(@RequestParam("pet_name") String pet_name,
                                 @RequestParam("image_url") String image_url, @RequestParam("description") String description,
-                                @RequestParam("price") int price, @RequestParam("pet_class") String pet_class) {
-        petClient.add_pet(pet_name, owner, image_url, description, price, pet_class);
-        return ResponseData.success("success");
+                                @RequestParam("price") int price, @RequestParam("pet_class") String pet_class,
+                                HttpServletRequest request) {
+        String token = request.getHeader("token");
+        Map<String, String> tokenMap = tokenUtil.parseToken(token);
+        String username = tokenMap.get("username");
+        String role = tokenMap.get("role");
+        if (User.ROLE_USER.equals(role)) {
+            petClient.add_pet(pet_name, username, image_url, description, price, pet_class);
+            return ResponseData.success("success");
+        }
+        else
+            return ResponseData.error("必须是普通用户才能进行购买!");
+
     }
 
     /**

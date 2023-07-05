@@ -4,17 +4,18 @@ package com.fisco.app.client;
 
 public interface UserClient {
 
-    public boolean user_login(String username, String password);
+    boolean login(String username, String password);
 
-    public boolean admin_login(String username, String password);
+    String query_role(String username);
 
-    public boolean register(String username, String password);
 
-    public int query_balance(String address);
+    boolean register(String username, String password);
 
-    public boolean add_balance(String address, int amount);
+    int query_balance(String address);
 
-    public boolean transfer(String from, String to, int amount);
+    boolean add_balance(String address, int amount);
+
+    boolean transfer(String from, String to, int amount);
 
     String query_address_by_username(String username);
 
