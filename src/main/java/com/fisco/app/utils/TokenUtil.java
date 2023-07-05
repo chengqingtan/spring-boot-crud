@@ -18,11 +18,11 @@ public class TokenUtil {
     /**
      * 加密token.
      */
-    public String getToken(String userId, String userRole) {
+    public String getToken(String username, String role) {
         //这个是放到负载payLoad 里面,魔法值可以使用常量类进行封装.
         String token = JWT.create()
-                .withClaim("userId" ,userId)
-                .withClaim("userRole", userRole)
+                .withClaim("username" ,username)
+                .withClaim("role", role)
                 .withClaim("timeStamp", System.currentTimeMillis())
                 .sign(Algorithm.HMAC256(secretKey));
         return token;
@@ -31,8 +31,8 @@ public class TokenUtil {
     /**
      * 解析token.
      * {
-     * "userId": "weizhong",
-     * "userRole": "ROLE_ADMIN",
+     * "username": "weizhong",
+     * "role": "ROLE_ADMIN",
      * "timeStamp": "134143214"
      * }
      */
@@ -40,11 +40,11 @@ public class TokenUtil {
         HashMap<String, String> map = new HashMap<String, String>();
         DecodedJWT decodedjwt = JWT.require(Algorithm.HMAC256(secretKey))
                 .build().verify(token);
-        Claim userId = decodedjwt.getClaim("userId");
-        Claim userRole = decodedjwt.getClaim("userRole");
+        Claim userId = decodedjwt.getClaim("username");
+        Claim userRole = decodedjwt.getClaim("role");
         Claim timeStamp = decodedjwt.getClaim("timeStamp");
-        map.put("userId", userId.asString());
-        map.put("userRole", userRole.asString());
+        map.put("username", userId.asString());
+        map.put("role", userRole.asString());
         map.put("timeStamp", timeStamp.asLong().toString());
         return map;
     }

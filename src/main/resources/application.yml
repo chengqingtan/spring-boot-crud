@@ -10,6 +10,7 @@ spring:
     initialization-mode: always
     continue-on-error: false
     schema: classpath:sql/schema.sql
+    data: classpath:sql/data.sql
 
 mybatis:
   mapper-locations: classpath:mybatis/*.xml

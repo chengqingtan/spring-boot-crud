@@ -27,7 +27,7 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
     @Autowired
     private UserMapper userMapper;
 
-    public boolean user_login(String username, String password) {
+    public boolean login(String username, String password) {
         User user = userMapper.selectByUsername(username);
         if (user == null || !password.equals(user.getPassword()))
             return false;
@@ -35,12 +35,12 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
             return true;
     }
 
-    public boolean admin_login(String username, String password) {
-        //未完成
-        if ("admin".equals(username) && "password".equals(password))
-            return true;
+    public String query_role(String username) {
+        User user = userMapper.selectByUsername(username);
+        if (user == null)
+            return null;
         else
-            return false;
+            return user.getRole();
     }
 
     public boolean register(String username, String password) {
@@ -59,7 +59,7 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
             //账户公钥
             String publicKey = credentials.getEcKeyPair().getPublicKey().toString(16);
             //存入到数据库
-            userMapper.addUser(new User(username, password, privateKey, publicKey, address));
+            userMapper.addUser(new User(username, password, privateKey, publicKey, address, User.ROLE_USER));
             //添加用户到合约
             UserContract userContract = (UserContract) getContractMap().get("UserContract");
             userContract.add_user(address);
