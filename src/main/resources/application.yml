@@ -24,3 +24,8 @@ logging:
     com: debug
 
 image-save-path: D:\fisco\images\
+
+token:
+  secretKey: X17iR94PzGpm96m9lo4tWPte/Dsfi4BI
+  refreshTime: 86400000
+  expiresTime: 43200000
