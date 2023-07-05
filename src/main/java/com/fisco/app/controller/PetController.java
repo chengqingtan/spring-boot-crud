@@ -3,11 +3,13 @@ package com.fisco.app.controller;
 import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
+import com.fisco.app.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,10 +19,14 @@ public class PetController {
     @Autowired
     private PetClient petClient;
 
+    public static final String CAT_PICTURE_SAVE_DIR = "D:/images/pet/";
+
     @PostMapping("/add_pet")
     public ResponseData add_pet(@RequestParam("pet_name") String pet_name, @RequestParam("owner") String owner,
-                                @RequestParam("picture_path") String picture_path, @RequestParam("description") String description,
+                                @RequestParam("picture") MultipartFile picture, @RequestParam("description") String description,
                                 @RequestParam("price") int price, @RequestParam("pet_class") String pet_class) {
+        String picture_path = FileUploadUtils.getFilePath(picture, CAT_PICTURE_SAVE_DIR);
+        FileUploadUtils.saveFile(picture, CAT_PICTURE_SAVE_DIR);
         petClient.add_pet(pet_name, owner, picture_path, description, price, pet_class);
         return ResponseData.success("success");
     }
