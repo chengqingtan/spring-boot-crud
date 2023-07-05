@@ -96,7 +96,10 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
 
     public boolean transfer(String from, String to, int amount) {
         UserContract userContract = (UserContract) getContractMap().get("UserContract");
-        userContract.transfer(from, to, BigInteger.valueOf(amount));
+        String from_address = userMapper.selectByUsername(from).getAddress();
+        String to_address = userMapper.selectByUsername(to).getAddress();
+
+        userContract.transfer(from_address, to_address, BigInteger.valueOf(amount));
         //无法接受boolean类型返回值，直接返回true.
         boolean whether_transfer_success = true;
         logger.info("调用UserClient的transfer方法");

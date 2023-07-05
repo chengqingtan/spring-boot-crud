@@ -14,7 +14,7 @@ public class UserController {
     @Autowired
     private UserClient userClient;
 
-    @PostMapping("test_post")
+    @PostMapping("/test_post")
     public ResponseData test_post() {
         return ResponseData.success("success");
     }

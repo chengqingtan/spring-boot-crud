@@ -47,10 +47,10 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
         return transactionList;
     }
 
-    public Transaction query_transaction_by_id(int transaction_id) {
+    public Transaction query_transaction_by_id(int pet_id) {
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
         try {
-            TransactionContract.Transaction transaction = transactionContract.query_pid_transaction(BigInteger.valueOf(transaction_id));
+            TransactionContract.Transaction transaction = transactionContract.query_pid_transaction(BigInteger.valueOf(pet_id));
             return translateTransaction(transaction);
         } catch (ContractException e) {
             System.err.println(getClass().getName() + " : query_transaction_by_id 抛出异常");

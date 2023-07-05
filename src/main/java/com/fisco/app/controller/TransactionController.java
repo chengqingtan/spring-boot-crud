@@ -72,12 +72,12 @@ public class TransactionController {
 
     /**
      * 通过交易id查询交易记录
-     * @param transaction_id 交易记录
+     * @param pet_id 交易记录
      * @return ResponseData.data 里包含一个交易记录
      */
     @PostMapping("/query_transaction_by_id")
-    public ResponseData query_transaction_by_id(@RequestParam("transaction_id") int transaction_id) {
-        Transaction transaction = transactionClient.query_transaction_by_id(transaction_id);
+    public ResponseData query_transaction_by_id(@RequestParam("pet_id") int pet_id) {
+        Transaction transaction = transactionClient.query_transaction_by_id(pet_id);
         return ResponseData.success(transaction);
     }
     
