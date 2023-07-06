@@ -2,18 +2,15 @@ package com.fisco.app.controller;
 
 import com.fisco.app.client.UserClient;
 import com.fisco.app.entity.ResponseData;
-import com.fisco.app.entity.User;
 import com.fisco.app.enums.CookieName;
+import com.fisco.app.enums.UserRole;
 import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
-import io.netty.handler.codec.http.cookie.CookieHeaderNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 @RestController
 public class UserController {
@@ -67,7 +64,7 @@ public class UserController {
         String username = tokenUtil.getUsername(token);
         String role = tokenUtil.getRole(token);
         //验证身份
-        if(User.ROLE_USER.equals(role)) {
+        if(UserRole.ROLE_USER.equals(role)) {
             int balance = userClient.query_balance(username);
             if(balance>=0)
                 return ResponseData.success(balance);
@@ -91,7 +88,7 @@ public class UserController {
         String username = tokenUtil.getUsername(token);
         String role = tokenUtil.getRole(token);
         //验证身份
-        if(User.ROLE_USER.equals(role)) {
+        if(UserRole.ROLE_USER.equals(role)) {
             boolean whether_add_success = userClient.add_balance(username, amount);
             if(whether_add_success)
                 return ResponseData.success("添加余额成功");

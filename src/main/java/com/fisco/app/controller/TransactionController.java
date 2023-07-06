@@ -6,21 +6,16 @@ import com.fisco.app.client.UserClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
 import com.fisco.app.entity.Transaction;
-import com.fisco.app.entity.User;
-import com.fisco.app.mapper.PetMapper;
-import com.fisco.app.mapper.UserMapper;
+import com.fisco.app.enums.UserRole;
 import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class TransactionController {
@@ -47,7 +42,7 @@ public class TransactionController {
         String username = tokenUtil.getUsername(token);
         String role = tokenUtil.getRole(token);
         //验证身份
-        if (User.ROLE_USER.equals(role)) {
+        if (UserRole.ROLE_USER.equals(role)) {
             //根据pet_id找到宠物的售卖人和宠物的价格
             Pet pet = petClient.query_pet_by_id(pet_id);
             //检查pet_id是否存在这个宠物

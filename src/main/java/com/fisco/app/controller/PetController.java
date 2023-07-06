@@ -3,7 +3,7 @@ package com.fisco.app.controller;
 import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
-import com.fisco.app.entity.User;
+import com.fisco.app.enums.UserRole;
 import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class PetController {
         String username = tokenUtil.getUsername(token);
         String role = tokenUtil.getRole(token);
         //验证身份
-        if (User.ROLE_USER.equals(role)) {
+        if (UserRole.ROLE_USER.equals(role)) {
             petClient.add_pet(pet_name, username, image_url, description, price, pet_class);
             return ResponseData.success("success");
         }
@@ -76,7 +76,7 @@ public class PetController {
         String username = tokenUtil.getUsername(token);
         String role = tokenUtil.getRole(token);
         //验证身份
-        if(User.ROLE_USER.equals(role)) {
+        if(UserRole.ROLE_USER.equals(role)) {
             List<Pet> pets = petClient.query_pets_by_owner(username);
             return ResponseData.success(pets);
         }

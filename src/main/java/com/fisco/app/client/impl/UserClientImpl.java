@@ -4,6 +4,7 @@ import com.fisco.app.client.UserClient;
 import com.fisco.app.common.CommonClient;
 import com.fisco.app.contract.UserContract;
 import com.fisco.app.entity.User;
+import com.fisco.app.enums.UserRole;
 import com.fisco.app.mapper.UserMapper;
 import com.fisco.app.utils.SpringUtils;
 import org.fisco.bcos.sdk.v3.BcosSDK;
@@ -59,7 +60,7 @@ public class UserClientImpl extends CommonClient implements ApplicationRunner, U
             //账户公钥
             String publicKey = credentials.getEcKeyPair().getPublicKey().toString(16);
             //存入到数据库
-            userMapper.addUser(new User(username, password, privateKey, publicKey, address, User.ROLE_USER));
+            userMapper.addUser(new User(username, password, privateKey, publicKey, address, UserRole.ROLE_USER));
             //添加用户到合约
             UserContract userContract = (UserContract) getContractMap().get("UserContract");
             userContract.add_user(address);
