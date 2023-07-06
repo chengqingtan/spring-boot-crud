@@ -6,6 +6,7 @@ import com.fisco.app.client.UserClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
 import com.fisco.app.entity.Transaction;
+import com.fisco.app.enums.PetStatus;
 import com.fisco.app.enums.UserRole;
 import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
@@ -48,10 +49,14 @@ public class TransactionController {
             //检查pet_id是否存在这个宠物
             if (pet == null) {
                 //宠物不存在，交易失败
-                return ResponseData.error("宠物不存在");
-            } else if (pet.getHas_sold_out()) {
+                return ResponseData.error("宠物不存在!");
+            } else if (PetStatus.SOLD_OUT.equals(pet.getPet_status())) {
                 //宠物已经卖出
-                return ResponseData.error("宠物已售出");
+                return ResponseData.error("宠物已售出!");
+            } else if (PetStatus.REMOVED.equals(pet.getPet_status())) {
+                //宠物已下架
+                return ResponseData.error("宠物已下架!");
+
             } else {
                 String owner = pet.getOwner();
                 int price = pet.getPrice();
