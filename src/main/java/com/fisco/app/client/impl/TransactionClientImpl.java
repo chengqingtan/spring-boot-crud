@@ -8,6 +8,7 @@ import com.fisco.app.entity.Transaction;
 import com.fisco.app.mapper.UserMapper;
 import com.fisco.app.utils.SpringUtils;
 import org.fisco.bcos.sdk.v3.BcosSDK;
+import org.fisco.bcos.sdk.v3.codec.datatypes.generated.tuples.generated.Tuple5;
 import org.fisco.bcos.sdk.v3.model.TransactionReceipt;
 import org.fisco.bcos.sdk.v3.transaction.model.exception.ContractException;
 import org.slf4j.Logger;
@@ -36,10 +37,13 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
         List<Transaction> transactionList = new ArrayList<>();
         try {
-            List<TransactionContract.Transaction> transactions = transactionContract.query_all_transaction();
-            for (TransactionContract.Transaction transaction : transactions) {
-                transactionList.add(translateTransaction(transaction));
+            Integer n = transactionContract.getNum().intValue();
+            for(int i = 0; i < n; i++){
+                BigInteger bi = BigInteger.valueOf(i);
+                Tuple5<BigInteger, String, String, String, BigInteger> t = transactionContract.query_all_transaction(bi);
+                transactionList.add(new Transaction(t.getValue1().intValue(), t.getValue2(), t.getValue3(), t.getValue4(), t.getValue5().intValue()));
             }
+
         } catch (ContractException e) {
             System.err.println(getClass().getName() + " : query_all_transactions 抛出异常");
             throw new RuntimeException(e);
@@ -50,10 +54,18 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
     public Transaction query_transaction_by_id(int pet_id) {
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
         try {
-            TransactionContract.Transaction transaction = transactionContract.query_pid_transaction(BigInteger.valueOf(pet_id));
-            return translateTransaction(transaction);
+            Integer n = transactionContract.getNum().intValue();
+            for(int i = 0; i < n; i++) {
+                BigInteger bi = BigInteger.valueOf(i);
+                Tuple5<BigInteger, String, String, String, BigInteger> t = transactionContract.query_all_transaction(bi);
+                if (t.getValue1().intValue() == pet_id) {
+                    Transaction transaction = new Transaction(t.getValue1().intValue(), t.getValue2(), t.getValue3(), t.getValue4(), t.getValue5().intValue());
+                    return transaction;
+                }
+            }
+            return null;
         } catch (ContractException e) {
-            System.err.println(getClass().getName() + " : query_transaction_by_id 抛出异常");
+            System.err.println(getClass().getName() + " : query_all_transactions 抛出异常");
             throw new RuntimeException(e);
         }
     }
@@ -65,15 +77,31 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
         //通过owner查询address
         String address = userMapper.selectByUsername(owner).getAddress();
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
+        List<Transaction> transactionList = new ArrayList<>();
+        try {
+            Integer n = transactionContract.getNum().intValue();
+            for(int i = 0; i < n; i++) {
+                BigInteger bi = BigInteger.valueOf(i);
+                Tuple5<BigInteger, String, String, String, BigInteger> t = transactionContract.query_all_transaction(bi);
+                if (t.getValue3() == owner) {
+                    transactionList.add(new Transaction(t.getValue1().intValue(), t.getValue2(), t.getValue3(), t.getValue4(), t.getValue5().intValue()));
+                    return transactionList;
+                }else{
+                    return null;
+                }
+            }
 
-
+        } catch (ContractException e) {
+            System.err.println(getClass().getName() + " : query_all_transactions 抛出异常");
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
-    private Transaction translateTransaction(TransactionContract.Transaction transaction) {
-        return new Transaction(transaction.pid.intValue(), transaction.purchase_username,
-                transaction.owner, transaction.transaction_date, transaction.price.intValue());
-    }
+//    private Transaction translateTransaction(TransactionContract.Transaction transaction) {
+//        return new Transaction(transaction.pid.intValue(), transaction.purchase_username,
+//                transaction.owner, transaction.transaction_date, transaction.price.intValue());
+//    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
