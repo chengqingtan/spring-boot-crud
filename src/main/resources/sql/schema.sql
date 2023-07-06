@@ -1,5 +1,5 @@
-drop table if exists tb_pet_class;
 drop table if exists tb_pet;
+drop table if exists tb_pet_class;
 drop table if exists tb_user_profile;
 drop table if exists tb_user;
 
