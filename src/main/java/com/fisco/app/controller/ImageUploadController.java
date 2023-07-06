@@ -53,7 +53,6 @@ public class ImageUploadController {
                 //返回URL
                 return ResponseData.success(url);
             }catch (IOException e) {
-                // TODO Auto-generated catch block
                 return ResponseData.error("图片上传失败");
             }
         }
