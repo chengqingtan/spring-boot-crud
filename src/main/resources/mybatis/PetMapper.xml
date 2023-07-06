@@ -17,6 +17,9 @@
     <select id="selectByOwner" resultType="com.fisco.app.entity.Pet">
         select * from tb_pet where owner=#{owner};
     </select>
+    <select id="selectByClass" resultType="com.fisco.app.entity.Pet">
+        select * from tb_pet where pet_class=#{pet_class};
+    </select>
 
 
 </mapper>

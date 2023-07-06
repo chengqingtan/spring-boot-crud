@@ -22,6 +22,8 @@ public interface PetMapper {
 //    @Select("select * from tb_pet where owner=#{owner};")
     List<Pet> selectByOwner(@Param("owner") String owner);
 
+    List<Pet> selectByClass(@Param("pet_class") String pet_class);
+
     @Insert("insert into tb_pet (pet_name, owner, image_url, description, price, pet_class) " +
             "VALUES (#{pet_name},#{owner},#{image_url},#{description},#{price},#{pet_class});")
     void addPet(@Param("pet_name") String pet_name, @Param("owner") String owner, @Param("image_url") String image_url,

@@ -20,17 +20,19 @@ public class PetClientImpl implements PetClient {
     }
 
     public Pet query_pet_by_id(int pet_id) {
-        Pet pet = petMapper.selectById(pet_id);
-        return pet;
+        return petMapper.selectById(pet_id);
     }
 
     public List<Pet> query_pets_by_owner(String owner) {
-        List<Pet> pets = petMapper.selectByOwner(owner);
-        return pets;
+        return petMapper.selectByOwner(owner);
     }
 
     public List<Pet> query_all_pets() {
         return petMapper.selectAll();
+    }
+
+    public List<Pet> query_pets_by_class(String pet_class) {
+        return petMapper.selectByClass(pet_class);
     }
 
     public void set_pet_has_sold_out(int pet_id) {
