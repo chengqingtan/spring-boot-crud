@@ -2,15 +2,13 @@ package com.fisco.app.controller;
 
 import com.fisco.app.client.UserClient;
 import com.fisco.app.entity.ResponseData;
-import com.fisco.app.enums.CookieName;
 import com.fisco.app.enums.UserRole;
-import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -23,7 +21,7 @@ public class UserController {
 
     @PostMapping("/testToken")
     public String testToken(HttpServletRequest request){
-        String token = CookieUtil.getToken(request);
+        String token = request.getHeader("token");
         tokenUtil.parseToken(token);
         return "请求成功";
     }
@@ -36,9 +34,7 @@ public class UserController {
             //查询身份
             String role = userClient.query_role(username);
             String token = tokenUtil.getToken(username, role);
-            response.addCookie(new Cookie(CookieName.ACCESS_TOKEN, token));
-            response.addCookie(new Cookie(CookieName.USERNAME, username));
-            return ResponseData.success("登录成功");
+            return ResponseData.success(token);
         }
         else
             return ResponseData.error("登录失败，请检查用户名或密码");
@@ -61,9 +57,10 @@ public class UserController {
     @RequestMapping("/query_balance")
     public ResponseData query_balance(HttpServletRequest request) {
         //提取token
-        String token = CookieUtil.getToken(request);
-        String username = tokenUtil.getUsername(token);
-        String role = tokenUtil.getRole(token);
+        String token = request.getHeader("token");
+        Map<String, String> map = tokenUtil.parseToken(token);
+        String username = map.get("username");
+        String role = map.get("role");
         //验证身份
         if(UserRole.ROLE_USER.equals(role)) {
             int balance = userClient.query_balance(username);
@@ -85,9 +82,10 @@ public class UserController {
     @PostMapping("/add_balance")
     public ResponseData add_balance(@RequestParam("amount") int amount, HttpServletRequest request) {
         //提取token
-        String token = CookieUtil.getToken(request);
-        String username = tokenUtil.getUsername(token);
-        String role = tokenUtil.getRole(token);
+        String token = request.getHeader("token");
+        Map<String, String> map = tokenUtil.parseToken(token);
+        String username = map.get("username");
+        String role = map.get("role");
         //验证身份
         if(UserRole.ROLE_USER.equals(role)) {
             boolean whether_add_success = userClient.add_balance(username, amount);
