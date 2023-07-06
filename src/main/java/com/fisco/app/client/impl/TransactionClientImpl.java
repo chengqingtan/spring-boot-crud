@@ -70,10 +70,30 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
         }
     }
 
-    /**
-     * 未完成，无法处理的返回值类型
-     */
-    public List<Transaction> query_transaction_by_owner(String owner) {
+    @Override
+    public List<Transaction> query_transactions_by_purchase_username(String username) {
+        //通过owner查询address
+        String address = userMapper.selectByUsername(username).getAddress();
+        TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
+        List<Transaction> transactionList = new ArrayList<>();
+        try {
+            Integer n = transactionContract.getNum().intValue();
+            for(int i = 0; i < n; i++) {
+                BigInteger bi = BigInteger.valueOf(i);
+                Tuple5<BigInteger, String, String, String, BigInteger> t = transactionContract.query_all_transaction(bi);
+                if (t.getValue2().equals(username)) {
+                    transactionList.add(new Transaction(t.getValue1().intValue(), t.getValue2(), t.getValue3(), t.getValue4(), t.getValue5().intValue()));
+
+                }
+            }
+            return transactionList;
+        } catch (ContractException e) {
+            System.err.println(getClass().getName() + " : query_all_transactions 抛出异常");
+            throw new RuntimeException(e);
+        }
+
+    }
+    public List<Transaction> query_transactions_by_owner(String owner) {
         //通过owner查询address
         String address = userMapper.selectByUsername(owner).getAddress();
         TransactionContract transactionContract = (TransactionContract) getContractMap().get("TransactionContract");
@@ -83,26 +103,18 @@ public class TransactionClientImpl extends CommonClient implements ApplicationRu
             for(int i = 0; i < n; i++) {
                 BigInteger bi = BigInteger.valueOf(i);
                 Tuple5<BigInteger, String, String, String, BigInteger> t = transactionContract.query_all_transaction(bi);
-                if (t.getValue3() == owner) {
+                System.out.println(t.getValue3());
+                if (t.getValue3().equals(owner)) {
+                    System.out.println(t.getValue1());
                     transactionList.add(new Transaction(t.getValue1().intValue(), t.getValue2(), t.getValue3(), t.getValue4(), t.getValue5().intValue()));
-                    return transactionList;
-                }else{
-                    return null;
                 }
             }
-
+            return transactionList;
         } catch (ContractException e) {
             System.err.println(getClass().getName() + " : query_all_transactions 抛出异常");
             throw new RuntimeException(e);
         }
-        return null;
     }
-
-//    private Transaction translateTransaction(TransactionContract.Transaction transaction) {
-//        return new Transaction(transaction.pid.intValue(), transaction.purchase_username,
-//                transaction.owner, transaction.transaction_date, transaction.price.intValue());
-//    }
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         BcosSDK sdk = SpringUtils.getBean("bcosSDK");

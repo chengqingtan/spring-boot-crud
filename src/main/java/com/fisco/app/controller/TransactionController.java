@@ -87,6 +87,17 @@ public class TransactionController {
     }
 
     /**
+     * 通过交易购买人username查询交易记录
+     * @param username g购买人
+     * @return ResponseData.data 里包含一个交易记录列表
+     */
+    @PostMapping("/query_transactions_by_purchase_username")
+    public ResponseData query_transactions_by_purchase_username(@RequestParam("username") String username) {
+        List<Transaction> transaction = transactionClient.query_transactions_by_purchase_username(username);
+        return ResponseData.success(transaction);
+    }
+
+    /**
      * 通过交易id查询交易记录
      * @param pet_id 交易记录
      * @return ResponseData.data 里包含一个交易记录
@@ -96,7 +107,17 @@ public class TransactionController {
         Transaction transaction = transactionClient.query_transaction_by_id(pet_id);
         return ResponseData.success(transaction);
     }
-    
+
+    /**
+     * 通过交易拥有人owner查询交易记录
+     * @param owner 购买人
+     * @return ResponseData.data 里包含一个交易记录列表
+     */
+    @PostMapping("/query_transactions_by_owner")
+    public ResponseData query_transactions_by_owner(@RequestParam("owner") String owner) {
+        List<Transaction> transaction = transactionClient.query_transactions_by_owner(owner);
+        return ResponseData.success(transaction);
+    }
     
     
 }
