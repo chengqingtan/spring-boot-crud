@@ -1,7 +1,6 @@
 package com.fisco.app.auth;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
@@ -36,15 +33,16 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         if (!(object instanceof HandlerMethod)) {
             return true;
         }
+
         //为空就返回错误
-        String token = CookieUtil.getToken(httpServletRequest);
+        String token = httpServletRequest.getHeader("token");
         if (null == token || "".equals(token.trim())) {
             return false;
         }
         log.info("==============token:" + token);
         Map<String, String> map = tokenUtil.parseToken(token);
-        String userId = map.get("userId");
-        String userRole = map.get("userRole");
+        String username = map.get("username");
+        String role = map.get("role");
         long timeOfUse = System.currentTimeMillis() - Long.parseLong(map.get("timeStamp"));
         //1.判断 token 是否过期
         if (timeOfUse < refreshTime) {
@@ -53,14 +51,13 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         }
         //超过token刷新时间，刷新 token
         else if (timeOfUse >= refreshTime && timeOfUse < expiresTime) {
-            httpServletResponse.setHeader("token",tokenUtil.getToken(userId,userRole));
+            httpServletResponse.setHeader("token",tokenUtil.getToken(username,role));
             log.info("token刷新成功");
             return true;
         }
         //token过期就返回 token 无效.
         else {
-//            throw new TokenAuthExpiredException();
-            throw new TokenExpiredException("token过期", Instant.now());
+            throw new TokenExpiredException("token过期，请重新登录", Instant.now());
         }
     }
 }

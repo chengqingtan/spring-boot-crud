@@ -4,7 +4,6 @@ import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
 import com.fisco.app.enums.UserRole;
-import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -29,9 +29,10 @@ public class PetController {
                                 @RequestParam("price") int price, @RequestParam("pet_class") String pet_class,
                                 HttpServletRequest request) {
         //提取token
-        String token = CookieUtil.getToken(request);
-        String username = tokenUtil.getUsername(token);
-        String role = tokenUtil.getRole(token);
+        String token = request.getHeader("token");
+        Map<String, String> map = tokenUtil.parseToken(token);
+        String username = map.get("username");
+        String role = map.get("role");
         //验证身份
         if (UserRole.ROLE_USER.equals(role)) {
             petClient.add_pet(pet_name, username, image_url, description, price, pet_class);
@@ -74,9 +75,10 @@ public class PetController {
     @PostMapping({"/query_own_pets"})
     public ResponseData query_own_pets(HttpServletRequest request) {
         //提取token
-        String token = CookieUtil.getToken(request);
-        String username = tokenUtil.getUsername(token);
-        String role = tokenUtil.getRole(token);
+        String token = request.getHeader("token");
+        Map<String, String> map = tokenUtil.parseToken(token);
+        String username = map.get("username");
+        String role = map.get("role");
         //验证身份
         if(UserRole.ROLE_USER.equals(role)) {
             List<Pet> pets = petClient.query_pets_by_owner(username);

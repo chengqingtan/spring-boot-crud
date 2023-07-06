@@ -8,7 +8,6 @@ import com.fisco.app.entity.ResponseData;
 import com.fisco.app.entity.Transaction;
 import com.fisco.app.enums.PetStatus;
 import com.fisco.app.enums.UserRole;
-import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -41,9 +41,10 @@ public class TransactionController {
     @PostMapping("/purchase_pet")
     public ResponseData purchase_pet(@RequestParam("pet_id") int pet_id, HttpServletRequest request) {
         //提取token
-        String token = CookieUtil.getToken(request);
-        String username = tokenUtil.getUsername(token);
-        String role = tokenUtil.getRole(token);
+        String token = request.getHeader("token");
+        Map<String, String> map = tokenUtil.parseToken(token);
+        String username = map.get("username");
+        String role = map.get("role");
         //验证身份
         if (UserRole.ROLE_USER.equals(role)) {
             //根据pet_id找到宠物的售卖人和宠物的价格
