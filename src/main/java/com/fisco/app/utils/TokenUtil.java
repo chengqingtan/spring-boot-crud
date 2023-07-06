@@ -48,4 +48,18 @@ public class TokenUtil {
         map.put("timeStamp", timeStamp.asLong().toString());
         return map;
     }
+
+    public String getUsername(String token) {
+        DecodedJWT decodedjwt = JWT.require(Algorithm.HMAC256(secretKey))
+                .build().verify(token);
+        Claim userId = decodedjwt.getClaim("username");
+        return userId.asString();
+    }
+
+    public String getRole(String token) {
+        DecodedJWT decodedjwt = JWT.require(Algorithm.HMAC256(secretKey))
+                .build().verify(token);
+        Claim userRole = decodedjwt.getClaim("role");
+        return userRole.asString();
+    }
 }

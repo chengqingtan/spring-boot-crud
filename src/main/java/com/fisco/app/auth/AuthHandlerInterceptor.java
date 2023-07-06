@@ -1,6 +1,7 @@
 package com.fisco.app.auth;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
@@ -35,7 +37,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
             return true;
         }
         //为空就返回错误
-        String token = httpServletRequest.getHeader("token");
+        String token = CookieUtil.getToken(httpServletRequest);
         if (null == token || "".equals(token.trim())) {
             return false;
         }

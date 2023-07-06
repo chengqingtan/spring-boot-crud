@@ -9,6 +9,7 @@ import com.fisco.app.entity.Transaction;
 import com.fisco.app.entity.User;
 import com.fisco.app.mapper.PetMapper;
 import com.fisco.app.mapper.UserMapper;
+import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,10 +42,11 @@ public class TransactionController {
      */
     @PostMapping("/purchase_pet")
     public ResponseData purchase_pet(@RequestParam("pet_id") int pet_id, HttpServletRequest request) {
-        String token = request.getHeader("token");
-        Map<String, String> tokenMap = tokenUtil.parseToken(token);
-        String username = tokenMap.get("username");
-        String role = tokenMap.get("role");
+        //提取token
+        String token = CookieUtil.getToken(request);
+        String username = tokenUtil.getUsername(token);
+        String role = tokenUtil.getRole(token);
+        //验证身份
         if (User.ROLE_USER.equals(role)) {
             //根据pet_id找到宠物的售卖人和宠物的价格
             Pet pet = petClient.query_pet_by_id(pet_id);

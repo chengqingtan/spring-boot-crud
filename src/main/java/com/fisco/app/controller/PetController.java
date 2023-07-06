@@ -4,16 +4,14 @@ import com.fisco.app.client.PetClient;
 import com.fisco.app.entity.Pet;
 import com.fisco.app.entity.ResponseData;
 import com.fisco.app.entity.User;
+import com.fisco.app.utils.CookieUtil;
 import com.fisco.app.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class PetController {
@@ -28,10 +26,11 @@ public class PetController {
                                 @RequestParam("image_url") String image_url, @RequestParam("description") String description,
                                 @RequestParam("price") int price, @RequestParam("pet_class") String pet_class,
                                 HttpServletRequest request) {
-        String token = request.getHeader("token");
-        Map<String, String> tokenMap = tokenUtil.parseToken(token);
-        String username = tokenMap.get("username");
-        String role = tokenMap.get("role");
+        //提取token
+        String token = CookieUtil.getToken(request);
+        String username = tokenUtil.getUsername(token);
+        String role = tokenUtil.getRole(token);
+        //验证身份
         if (User.ROLE_USER.equals(role)) {
             petClient.add_pet(pet_name, username, image_url, description, price, pet_class);
             return ResponseData.success("success");
@@ -64,6 +63,25 @@ public class PetController {
     public ResponseData query_pets_by_owner(@RequestParam("owner") String owner) {
         List<Pet> pets = petClient.query_pets_by_owner(owner);
         return ResponseData.success(pets);
+    }
+
+    /**
+     * 查询自己售卖的所有宠物
+     * @return 返回值里包含一个宠物列表(宠物列表可能为空)
+     */
+    @PostMapping({"/query_own_pets"})
+    public ResponseData query_own_pets(HttpServletRequest request) {
+        //提取token
+        String token = CookieUtil.getToken(request);
+        String username = tokenUtil.getUsername(token);
+        String role = tokenUtil.getRole(token);
+        //验证身份
+        if(User.ROLE_USER.equals(role)) {
+            List<Pet> pets = petClient.query_pets_by_owner(username);
+            return ResponseData.success(pets);
+        }
+        else
+            return ResponseData.error("只有普通用户才能查询自己上架的宠物");
     }
 
     /**
