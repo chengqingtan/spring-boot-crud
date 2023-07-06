@@ -11,10 +11,9 @@ public interface TransactionClient {
 
     List<Transaction> query_all_transactions();
 
-    public Transaction query_transaction_by_id(int transaction_id);
+    Transaction query_transaction_by_id(int transaction_id);
 
-    /**
-     * 未完成，无法处理的返回值类型
-     */
+    List<Transaction> query_transactions_by_purchase_username(String username);
+
     List<Transaction> query_transaction_by_owner(String owner);
 }
