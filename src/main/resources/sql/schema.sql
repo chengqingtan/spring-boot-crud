@@ -10,16 +10,16 @@ create table if not exists tb_user
     private_key text,
     public_key  text,
     address     varchar(50),
-    role        varchar(15) default 'ROLE_USER' CHECK ( ROLE IN ('ROLE_USER', 'ROLE_ADMIN') )
+    role        varchar(15) default 'role_user' CHECK ( ROLE IN ('role_user', 'role_admin') )
 );
 
 create table if not exists tb_user_profile
 (
     username varchar(10) primary key,
     birthday date,
-    sex varchar(10) default 'hide' CHECK ( sex in ('male', 'female', 'hide') ),
-    avatar_path varchar(50),
-    hobby text,
+    gender varchar(10) default 'hide' CHECK ( gender in ('male', 'female', 'hide') ),
+    avatar_url varchar(50),
+    description text,
     CONSTRAINT username_constraint
     FOREIGN KEY (username) REFERENCES tb_user (username)
 );
