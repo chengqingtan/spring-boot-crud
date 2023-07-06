@@ -33,14 +33,14 @@ create table if not exists tb_pet_class
 
 create table if not exists tb_pet
 (
-    pet_id       int primary key auto_increment,
-    pet_name     varchar(10),
-    owner        varchar(10),
-    image_url    varchar(50),
-    description  varchar(20),
-    price        int,
-    pet_class    varchar(10),
-    has_sold_out boolean default false,
+    pet_id      int primary key auto_increment,
+    pet_name    varchar(10),
+    owner       varchar(10),
+    image_url   varchar(50),
+    description varchar(20),
+    price       int,
+    pet_class   varchar(10),
+    pet_status  varchar(10) default 'on_sale',
     CONSTRAINT owner_constraint
         FOREIGN KEY (owner) REFERENCES tb_user (username),
     CONSTRAINT pet_class_constraint
