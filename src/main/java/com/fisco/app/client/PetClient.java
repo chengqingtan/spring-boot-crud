@@ -14,6 +14,8 @@ public interface PetClient {
 
     List<Pet> query_all_pets();
 
+    List<Pet> query_pets_by_class(String pet_class);
+
     void set_pet_has_sold_out(int pet_id);
 
 }
