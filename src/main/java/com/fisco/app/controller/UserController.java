@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin
@@ -34,7 +35,10 @@ public class UserController {
             //查询身份
             String role = userClient.query_role(username);
             String token = tokenUtil.getToken(username, role);
-            return ResponseData.success(token);
+            Map<String, String> map = new HashMap<>();
+            map.put("token", token);
+            map.put("role", role);
+            return ResponseData.success(map);
         }
         else
             return ResponseData.error("登录失败，请检查用户名或密码");
